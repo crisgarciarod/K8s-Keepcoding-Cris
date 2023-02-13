@@ -1,0 +1,58 @@
+apiVersion: apps/v1 #Version de la api (va cambiando)
+kind: Deployment #Tipo: Deployment
+metadata: #Metadatos del deployment
+  name: app-deployment
+   ############################### namespace: prueba2 ##########################3
+spec: #specificacion del deployment
+  selector:
+    matchLabels:
+      app: python
+  replicas: 1 #indica al controlador que ejecute 1 pod
+  template:
+    metadata:   # metadatos del pod
+      labels:
+       app: python
+    spec: #specificaciones del pod
+      containers: #Declaracion de los contenedores del pods
+      - name: app-container  
+        image: crisgarcia/app-python:1.0.0
+        ports:
+        - containerPort: 5000
+        env: 
+          - name: MYSQL_DB
+            valueFrom:
+              secretKeyRef:
+                name: mysecretapp
+                key: mysql_db
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: mysecretapp
+                key: mysql_user            
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: mysecretapp
+                key: mysql_password
+          - name: MYSQL_HOST
+            value: mysql-service 
+          - name: FLASK_APP
+            valueFrom:  
+              configMapKeyRef:
+                name: myconfigmap
+                key: flask_app
+          - name: FLASK_ENV 
+            valueFrom:  
+              configMapKeyRef:
+                name: myconfigmap
+                key: flask_env          
+          - name: FLASK_RUN_HOST
+            valueFrom:  
+              configMapKeyRef:
+                name: myconfigmap
+                key: flask_run_host
+           
+     
+    
+      
+        

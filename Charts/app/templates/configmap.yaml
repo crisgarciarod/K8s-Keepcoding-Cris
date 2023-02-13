@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "app.fullname" . }}
+  labels:
+    {{- include "app.labels" . | nindent 4 }}
+data: 
+  flask_app: {{ .Values.flask.appName }} 
+  flask_env: {{ .Values.flask.flaskEnv }}
+  flask_run_host: {{ .Values.flask.host }}
